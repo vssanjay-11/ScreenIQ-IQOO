@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScreenIQ</string>
+    <string name="accessibility_service_name">ScreenIQ Gesture Engine</string>
+    <string name="accessibility_service_description">Enables system-wide four-finger swipe gesture detection to trigger the ScreenIQ AI action layer.</string>
+</resources>
