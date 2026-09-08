@@ -1,16 +1,16 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
     namespace = "com.screeniq"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.screeniq"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
 
@@ -29,12 +29,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    buildFeatures {
+        compose = true
     }
 }
-
-// Using host JDK with compileOptions Java 17 bytecode target
 
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")

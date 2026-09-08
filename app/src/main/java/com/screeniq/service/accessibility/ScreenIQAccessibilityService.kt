@@ -24,6 +24,7 @@ class ScreenIQAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        instance = this
         Log.i(TAG, "ScreenIQ AccessibilityService connected.")
 
         configureServiceInfo()
@@ -118,11 +119,42 @@ class ScreenIQAccessibilityService : AccessibilityService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        instance = null
         Log.i(TAG, "ScreenIQ AccessibilityService destroyed.")
         gestureManager.updateServiceConnectionState(false)
     }
 
     companion object {
         private const val TAG = "ScreenIQ:A11yService"
+
+        @Volatile
+        var instance: ScreenIQAccessibilityService? = null
+            private set
+
+        val captureBridge: com.screeniq.capture.accessibility.AccessibilityCaptureBridge =
+            object : com.screeniq.capture.accessibility.AccessibilityCaptureBridge {
+                override val isServiceConnected: Boolean
+                    get() = instance != null
+
+                override val currentForegroundPackage: String?
+                    get() = try {
+                        instance?.rootInActiveWindow?.packageName?.toString()
+                    } catch (_: Exception) {
+                        null
+                    }
+
+                override fun takeScreenshot(
+                    displayId: Int,
+                    executor: java.util.concurrent.Executor,
+                    callback: AccessibilityService.TakeScreenshotCallback
+                ) {
+                    val s = instance
+                    if (s != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                        s.takeScreenshot(displayId, executor, callback)
+                    } else {
+                        callback.onFailure(AccessibilityService.ERROR_TAKE_SCREENSHOT_NO_ACCESSIBILITY_ACCESS)
+                    }
+                }
+            }
     }
 }

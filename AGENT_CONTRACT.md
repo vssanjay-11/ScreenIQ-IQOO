@@ -80,6 +80,11 @@ Before starting work, every agent must execute this sequence:
 [STEP 5: UPDATE STATUS]
   ├── Update TASK_STATUS.md with files created, status, and integration notes
   └── Document exposed interfaces for downstream agents
+
+[STEP 6: COMMIT & PUSH]
+  ├── Stage all created/modified files (`git add -A`)
+  ├── Commit with descriptive message identifying Agent ID and domain (`git commit -m "feat(<domain>): ..."`)
+  └── Push to remote branch (`git push origin <branch>`)
 ```
 
 ---
