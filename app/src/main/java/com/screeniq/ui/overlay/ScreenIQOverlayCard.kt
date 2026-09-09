@@ -108,25 +108,23 @@ fun ScreenIQOverlay(
                 ) {
                     when (state) {
                         is OverlayState.Processing -> {
-                            ProcessingCard(
-                                stage = state.stage,
-                                elapsedMs = state.elapsedMs,
-                                onCancel = onDismiss
-                            )
+                            // Full-screen laser scanning animation
+                            ScreenScanAnimationOverlay()
                         }
                         is OverlayState.SuggestionsReady -> {
-                            SuggestionsCard(
+                            // Floating pop-up window listing completed background processes & actions
+                            FloatingProcessResultWindow(
                                 classification = state.classification,
                                 suggestions = state.suggestions,
                                 elapsedMs = state.elapsedMs,
-                                onActionClicked = { action ->
+                                onActionSelected = { action ->
                                     if (action.safetyLevel == ActionSafetyLevel.SAFE_AUTO) {
                                         onActionSelected(action)
                                     } else {
                                         onConfirmAction(action)
                                     }
                                 },
-                                onCancel = onDismiss
+                                onDismiss = onDismiss
                             )
                         }
                         is OverlayState.ConfirmingAction -> {

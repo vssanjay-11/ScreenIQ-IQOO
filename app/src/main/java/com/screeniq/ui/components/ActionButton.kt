@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -126,7 +127,7 @@ private fun RowScope.ButtonContent(
 ) {
     if (leadingIcon != null) {
         leadingIcon()
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.androidx.compose.foundation.layout.width(8.dp))
+        androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(8.dp))
     }
     Text(
         text = text,

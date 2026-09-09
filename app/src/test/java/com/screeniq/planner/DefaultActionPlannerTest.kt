@@ -86,7 +86,7 @@ class DefaultActionPlannerTest {
     fun testPhoneCommunicationPlanning() = runBlocking {
         val classification = ContentClassification(
             captureId = "cap_comm_01",
-            primaryCategory = ContentCategory.COMMUNICATION,
+            primaryCategory = ContentCategory.PHONE,
             extractedEntities = listOf(
                 DetectedEntity(
                     type = EntityType.PHONE_NUMBER,
@@ -115,7 +115,7 @@ class DefaultActionPlannerTest {
     fun testEmailCommunicationPlanning() = runBlocking {
         val classification = ContentClassification(
             captureId = "cap_comm_02",
-            primaryCategory = ContentCategory.COMMUNICATION,
+            primaryCategory = ContentCategory.EMAIL,
             extractedEntities = listOf(
                 DetectedEntity(
                     type = EntityType.EMAIL,
@@ -137,7 +137,7 @@ class DefaultActionPlannerTest {
     fun testWebLinkPlanning() = runBlocking {
         val classification = ContentClassification(
             captureId = "cap_url_01",
-            primaryCategory = ContentCategory.WEB_LINK,
+            primaryCategory = ContentCategory.URL,
             extractedEntities = listOf(
                 DetectedEntity(
                     type = EntityType.URL,
@@ -158,7 +158,7 @@ class DefaultActionPlannerTest {
     fun testCommerceProductPlanning() = runBlocking {
         val classification = ContentClassification(
             captureId = "cap_prod_01",
-            primaryCategory = ContentCategory.COMMERCE_PRODUCT,
+            primaryCategory = ContentCategory.PRODUCT,
             extractedEntities = listOf(
                 DetectedEntity(
                     type = EntityType.PRODUCT_INFO,
@@ -186,7 +186,7 @@ class DefaultActionPlannerTest {
     fun testProductivityTaskPlanning() = runBlocking {
         val classification = ContentClassification(
             captureId = "cap_task_01",
-            primaryCategory = ContentCategory.PRODUCTIVITY_TASK,
+            primaryCategory = ContentCategory.TASK,
             extractedEntities = listOf(
                 DetectedEntity(
                     type = EntityType.TASK_TODO,
@@ -215,7 +215,7 @@ class DefaultActionPlannerTest {
     fun testDocumentSummaryPlanning() = runBlocking {
         val classification = ContentClassification(
             captureId = "cap_doc_01",
-            primaryCategory = ContentCategory.DOCUMENT_SUMMARY,
+            primaryCategory = ContentCategory.DOCUMENT,
             extractedEntities = listOf(
                 DetectedEntity(
                     type = EntityType.DOCUMENT_SNIPPET,
@@ -238,7 +238,7 @@ class DefaultActionPlannerTest {
         // Test Payment QR (Must be marked DANGEROUS, user confirmation required)
         val paymentQrClassification = ContentClassification(
             captureId = "cap_qr_01",
-            primaryCategory = ContentCategory.QR_ACTION,
+            primaryCategory = ContentCategory.QR_CODE,
             extractedEntities = listOf(
                 DetectedEntity(
                     type = EntityType.QR_BARCODE,
@@ -259,7 +259,7 @@ class DefaultActionPlannerTest {
     fun testUnknownGeneralPlanning() = runBlocking {
         val classification = ContentClassification(
             captureId = "cap_unk_01",
-            primaryCategory = ContentCategory.UNKNOWN_GENERAL,
+            primaryCategory = ContentCategory.UNKNOWN,
             summary = "Unrecognized graphical diagram",
             confidenceScore = 0.35f
         )

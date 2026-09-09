@@ -26,7 +26,9 @@ class DefaultActionPlanner(
         val resultSuggestions = mutableListOf<ActionSuggestion>()
 
         // 1. Resolve strategy for primary category
-        val primaryStrategy = strategies[classification.primaryCategory] ?: strategies[ContentCategory.UNKNOWN_GENERAL]!!
+        val primaryStrategy = strategies[classification.primaryCategory]
+            ?: strategies[ContentCategory.UNKNOWN]
+            ?: UnknownActionStrategy()
         val primarySuggestions = primaryStrategy.plan(classification)
 
         resultSuggestions.addAll(primarySuggestions)
@@ -65,16 +67,22 @@ class DefaultActionPlanner(
 
     companion object {
         fun defaultStrategies(): Map<ContentCategory, CategoryActionStrategy> {
+            val commStrategy = CommunicationActionStrategy()
+            val unknownStrategy = UnknownActionStrategy()
             return mapOf(
                 ContentCategory.EVENT to EventActionStrategy(),
                 ContentCategory.LOCATION to LocationActionStrategy(),
-                ContentCategory.COMMUNICATION to CommunicationActionStrategy(),
-                ContentCategory.WEB_LINK to WebLinkActionStrategy(),
-                ContentCategory.COMMERCE_PRODUCT to CommerceActionStrategy(),
-                ContentCategory.PRODUCTIVITY_TASK to ProductivityTaskStrategy(),
-                ContentCategory.DOCUMENT_SUMMARY to DocumentActionStrategy(),
-                ContentCategory.QR_ACTION to QrActionStrategy(),
-                ContentCategory.UNKNOWN_GENERAL to UnknownActionStrategy()
+                ContentCategory.PHONE to commStrategy,
+                ContentCategory.EMAIL to commStrategy,
+                ContentCategory.CONTACT to commStrategy,
+                ContentCategory.URL to WebLinkActionStrategy(),
+                ContentCategory.PRODUCT to CommerceActionStrategy(),
+                ContentCategory.TASK to ProductivityTaskStrategy(),
+                ContentCategory.DOCUMENT to DocumentActionStrategy(),
+                ContentCategory.QR_CODE to QrActionStrategy(),
+                ContentCategory.IMAGE to unknownStrategy,
+                ContentCategory.TEXT to unknownStrategy,
+                ContentCategory.UNKNOWN to unknownStrategy
             )
         }
     }

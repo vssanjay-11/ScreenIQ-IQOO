@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.screeniq.ui.components.ScreenIQTopBar
 import com.screeniq.ui.theme.BrandPrimary
 import com.screeniq.ui.theme.ScreenIQShapes
@@ -178,7 +179,7 @@ private fun SettingsSectionHeader(title: String) {
         text = title,
         style = MaterialTheme.typography.labelMedium.copy(
             fontWeight = FontWeight.Bold,
-            letterSpacing = androidx.compose.ui.unit.sp(1.2f)
+            letterSpacing = 1.2.sp
         ),
         color = MaterialTheme.colorScheme.primary
     )
@@ -195,9 +196,9 @@ private fun SettingsCard(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.25f))
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            content = { content() }
+            modifier = Modifier.fillMaxWidth()
         ) {
+            content()
         }
     }
 }

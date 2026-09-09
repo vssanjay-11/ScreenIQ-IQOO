@@ -1,10 +1,11 @@
-﻿package com.screeniq.ocr.engine
+package com.screeniq.ocr.engine
 
 import android.graphics.Bitmap
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.screeniq.core.model.TextBlock
+import com.screeniq.core.model.toScreenRect
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -35,7 +36,7 @@ class MlKitTextRecognizerDelegate : TextRecognizerDelegate {
                         blocks.add(
                             TextBlock(
                                 text = block.text,
-                                boundingBox = block.boundingBox,
+                                boundingBox = block.boundingBox?.toScreenRect(),
                                 confidence = 0.95f
                             )
                         )

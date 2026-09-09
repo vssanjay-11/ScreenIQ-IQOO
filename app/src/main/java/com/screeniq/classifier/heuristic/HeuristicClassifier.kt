@@ -43,9 +43,9 @@ class HeuristicClassifier {
         )
 
         private val CONTACT_KEYWORDS = setOf(
-            "dr.", "prof.", "mr.", "ms.", "mrs.", "ceo", "cto", "founder", "director",
-            "manager", "engineer", "designer", "consultant", "officer", "executive",
-            "contact person", "designation", "business card", "phone:", "mobile:", "tel:"
+            "dr", "dr.", "prof", "prof.", "mr", "mr.", "ms", "ms.", "mrs", "mrs.", "ceo", "cto", "founder", "director",
+            "manager", "engineer", "architect", "designer", "consultant", "officer", "executive", "lead",
+            "contact person", "designation", "business card", "phone", "phone:", "mobile", "mobile:", "tel", "tel:", "email"
         )
 
         private val LOCATION_KEYWORDS = setOf(
@@ -69,7 +69,7 @@ class HeuristicClassifier {
             )
         }
 
-        val words = trimmed.lowercase().split(Regex("""\s+""")).filter { it.isNotBlank() }
+        val words = trimmed.lowercase().split(Regex("""[\s,.:;!?()\[\]{}]+""")).filter { it.isNotBlank() }
         val wordCount = words.size
         val entityTypes = entities.map { it.type }.toSet()
 

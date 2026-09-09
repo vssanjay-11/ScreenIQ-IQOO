@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -36,7 +37,7 @@ class GestureTriggerManagerTest {
         val testEvent = GestureTriggerEvent(pointerCount = 4, timestampMs = 123456789L)
 
         val receivedEvents = mutableListOf<GestureTriggerEvent>()
-        val job = launch {
+        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             manager.gestureEvents.take(1).toList(receivedEvents)
         }
 
@@ -68,7 +69,7 @@ class GestureTriggerManagerTest {
         manager.enableDetection()
         assertTrue(manager.isDetectionEnabled())
 
-        val deferredEvent = async {
+        val deferredEvent = backgroundScope.async(UnconfinedTestDispatcher(testScheduler)) {
             manager.gestureEvents.first()
         }
 
@@ -80,8 +81,8 @@ class GestureTriggerManagerTest {
     }
 
     @Test
-    fun testFallbackTriggerProducesFourFingerEvent() = runTest {
-        val deferredEvent = async {
+    fun testFallbackTriggerProducesTwoFingerEvent() = runTest {
+        val deferredEvent = backgroundScope.async(UnconfinedTestDispatcher(testScheduler)) {
             manager.gestureEvents.first()
         }
 
@@ -89,8 +90,21 @@ class GestureTriggerManagerTest {
         assertTrue("Fallback trigger should be accepted", accepted)
 
         val emitted = deferredEvent.await()
-        assertEquals(4, emitted.pointerCount)
+        assertEquals(2, emitted.pointerCount)
         assertTrue(emitted.timestampMs > 0L)
+    }
+
+    @Test
+    fun testNotifyTwoFingerSwipe() = runTest {
+        val deferredEvent = backgroundScope.async(UnconfinedTestDispatcher(testScheduler)) {
+            manager.gestureEvents.first()
+        }
+
+        val accepted = manager.notifyTwoFingerSwipe()
+        assertTrue("Two-finger swipe should be accepted", accepted)
+
+        val emitted = deferredEvent.await()
+        assertEquals(2, emitted.pointerCount)
     }
 
     @Test

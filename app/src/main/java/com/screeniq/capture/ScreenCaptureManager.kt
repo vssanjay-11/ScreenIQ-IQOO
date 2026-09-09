@@ -72,7 +72,7 @@ class ScreenCaptureManager(
         }
 
         return try {
-            val originalBitmap = result.bitmap
+            val originalBitmap = result.bitmap ?: return Result.success(result)
             val scaleFactor = maxDim.toFloat() / maxOf(result.width, result.height).toFloat()
             val targetWidth = (result.width * scaleFactor).toInt()
             val targetHeight = (result.height * scaleFactor).toInt()

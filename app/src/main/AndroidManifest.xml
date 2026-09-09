@@ -25,6 +25,14 @@
             </intent-filter>
         </activity>
 
+        <!-- Translucent Overlay Activity for 2-Finger Swipe Gesture & Floating Result Window -->
+        <activity
+            android:name=".ui.overlay.ScreenIQOverlayActivity"
+            android:exported="true"
+            android:theme="@style/Theme.ScreenIQ.TranslucentOverlay"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask" />
+
         <!-- ScreenIQ System Accessibility Service for Gesture Detection -->
         <service
             android:name=".service.accessibility.ScreenIQAccessibilityService"

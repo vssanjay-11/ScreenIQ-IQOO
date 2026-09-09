@@ -1,4 +1,4 @@
-﻿package com.screeniq.ocr.test
+package com.screeniq.ocr.test
 
 import android.graphics.Bitmap
 import android.graphics.Rect
@@ -134,12 +134,12 @@ fun main() = runBlocking {
     // TEST 9: Full End-to-End Analyzer with Mock OCR Blocks
     println("\n--- Test 9: End-to-End Analyzer Flow ---")
     val mockBlocks = listOf(
-        TextBlock("iQOO Hackathon 2026", Rect(50, 100, 400, 150), 0.98f),
-        TextBlock("Date: 15 October 2026", Rect(50, 160, 300, 190), 0.95f),
-        TextBlock("Time: 09:30 AM", Rect(50, 200, 250, 230), 0.95f),
-        TextBlock("Venue: IIT Madras Research Park", Rect(50, 240, 500, 280), 0.92f),
-        TextBlock("RSVP: rsvp@iqoohackathon.com", Rect(50, 290, 450, 320), 0.99f),
-        TextBlock("Registration Fee: Rs. 0 (Free)", Rect(50, 330, 350, 360), 0.90f)
+        TextBlock("iQOO Hackathon 2026", ScreenRect(50, 100, 400, 150), 0.98f),
+        TextBlock("Date: 15 October 2026", ScreenRect(50, 160, 300, 190), 0.95f),
+        TextBlock("Time: 09:30 AM", ScreenRect(50, 200, 250, 230), 0.95f),
+        TextBlock("Venue: IIT Madras Research Park", ScreenRect(50, 240, 500, 280), 0.92f),
+        TextBlock("RSVP: rsvp@iqoohackathon.com", ScreenRect(50, 290, 450, 320), 0.99f),
+        TextBlock("Registration Fee: Rs. 0 (Free)", ScreenRect(50, 330, 350, 360), 0.90f)
     )
 
     // Using dummy 1080x2400 dimensions (bitmap non-null simulation)

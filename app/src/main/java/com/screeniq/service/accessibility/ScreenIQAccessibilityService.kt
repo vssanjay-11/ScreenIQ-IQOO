@@ -79,30 +79,46 @@ class ScreenIQAccessibilityService : AccessibilityService() {
 
     private fun handleGestureId(gestureId: Int): Boolean {
         val isTargetGesture = when {
-            // Android 12+ (API 31+) GESTURE_4_FINGER_SWIPE_UP is constant 37
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && gestureId == AccessibilityService.GESTURE_4_FINGER_SWIPE_UP -> true
-            // Support direct constant check (value 37 corresponds to GESTURE_4_FINGER_SWIPE_UP)
-            gestureId == 37 -> true
-            // Also recognize 4-finger swipes in other directions as intentional ScreenIQ gestures if enabled
+            // Android 12+ (API 31+) 2-Finger Swipes:
+            // 40 = GESTURE_2_FINGER_SWIPE_DOWN
+            // 39 = GESTURE_2_FINGER_SWIPE_UP
+            // 41 = GESTURE_2_FINGER_SWIPE_LEFT
+            // 42 = GESTURE_2_FINGER_SWIPE_RIGHT
+            gestureId == 40 || gestureId == 39 || gestureId == 41 || gestureId == 42 -> true
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (
-                gestureId == AccessibilityService.GESTURE_4_FINGER_SWIPE_DOWN ||
-                gestureId == AccessibilityService.GESTURE_4_FINGER_SWIPE_LEFT ||
-                gestureId == AccessibilityService.GESTURE_4_FINGER_SWIPE_RIGHT
-            ) -> {
-                Log.i(TAG, "Detected alternative 4-finger swipe direction (id=$gestureId). Dispatching trigger.")
-                true
-            }
+                gestureId == AccessibilityService.GESTURE_2_FINGER_SWIPE_DOWN ||
+                gestureId == AccessibilityService.GESTURE_2_FINGER_SWIPE_UP ||
+                gestureId == AccessibilityService.GESTURE_2_FINGER_SWIPE_LEFT ||
+                gestureId == AccessibilityService.GESTURE_2_FINGER_SWIPE_RIGHT
+            ) -> true
+            // Legacy / Directional Swipes
+            gestureId == AccessibilityService.GESTURE_SWIPE_DOWN ||
+            gestureId == AccessibilityService.GESTURE_SWIPE_UP -> true
+            // Backward-compatible 4-finger swipes (37 = UP, 38 = DOWN)
+            gestureId == 37 || gestureId == 38 -> true
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (
+                gestureId == AccessibilityService.GESTURE_4_FINGER_SWIPE_UP ||
+                gestureId == AccessibilityService.GESTURE_4_FINGER_SWIPE_DOWN
+            ) -> true
             else -> false
         }
 
         if (isTargetGesture) {
-            Log.i(TAG, "Detected Four-Finger Swipe gesture! Dispatching ScreenIQ trigger event.")
+            Log.i(TAG, "Detected 2-Finger Swipe gesture (id=$gestureId)! Dispatching ScreenIQ trigger event.")
             val event = GestureTriggerEvent(
-                pointerCount = 4,
+                pointerCount = 2,
                 timestampMs = System.currentTimeMillis()
             )
             val accepted = gestureManager.notifyTrigger(event)
             Log.d(TAG, "Trigger event dispatch status: accepted=$accepted")
+
+            // Launch the translucent overlay activity over the current foreground app
+            try {
+                com.screeniq.ui.overlay.ScreenIQOverlayActivity.start(this)
+            } catch (e: Exception) {
+                Log.w(TAG, "Could not start ScreenIQOverlayActivity directly: ${e.message}")
+            }
+
             return true
         }
 

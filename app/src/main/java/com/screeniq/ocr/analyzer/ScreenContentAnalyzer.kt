@@ -1,4 +1,4 @@
-﻿package com.screeniq.ocr.analyzer
+package com.screeniq.ocr.analyzer
 
 import com.screeniq.core.contracts.OcrEngine
 import com.screeniq.core.model.ScreenCaptureResult
@@ -36,8 +36,11 @@ class ScreenContentAnalyzer(
         return runCatching {
             val bitmap = captureResult.bitmap
 
+            // 1. Extract visual text blocks from image using OCR
+            val recognizedBlocks = textRecognizer.recognize(bitmap)
+
             // Guard against empty / recycled / corrupted input frames
-            if (bitmap == null || (bitmap.width <= 0 || bitmap.height <= 0)) {
+            if (recognizedBlocks.isEmpty() && (bitmap == null || bitmap.width <= 0 || bitmap.height <= 0)) {
                 return@runCatching ScreenContent(
                     captureId = captureResult.captureId,
                     rawFullText = "",
@@ -46,9 +49,6 @@ class ScreenContentAnalyzer(
                     extractionDurationMs = System.currentTimeMillis() - startTime
                 )
             }
-
-            // 1. Extract visual text blocks from image using OCR
-            val recognizedBlocks = textRecognizer.recognize(bitmap)
 
             // 2. Cluster spatial blocks if appropriate for coherent paragraph/header boundaries
             val clusteredBlocks = if (recognizedBlocks.size > 1) {

@@ -42,8 +42,12 @@ data class DetectedEntity(
     val rawValue: String,
     val normalizedValue: String? = null,
     val boundingBox: ScreenRect? = null,
-    val confidence: Float = 1.0f
+    val confidence: Float = 1.0f,
+    val metadata: Map<String, Any> = emptyMap()
 )
+
+fun android.graphics.Rect.toScreenRect(): ScreenRect = ScreenRect(left, top, right, bottom)
+fun ScreenRect.toAndroidRect(): android.graphics.Rect = android.graphics.Rect(left, top, right, bottom)
 
 /**
  * Fine-grained entity types recognized on screen.

@@ -1,8 +1,8 @@
-﻿package com.screeniq.ocr.entity
+package com.screeniq.ocr.entity
 
-import android.graphics.Rect
 import com.screeniq.core.model.DetectedEntity
 import com.screeniq.core.model.EntityType
+import com.screeniq.core.model.ScreenRect
 import java.util.regex.Pattern
 
 /**
@@ -31,7 +31,7 @@ class EntityPatternExtractor {
 
         // URLs & Domains: https://..., http://..., www...., or domain.com/path
         private val URL_PATTERN = Pattern.compile(
-            """\b(?:https?://|www\.)[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]+|(?:[a-zA-Z0-9\-]+\.)+(?:com|org|net|io|edu|gov|in|ai|co|app|dev)(?:/[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]*)?\b""",
+            """\b(?:https?://|www\.)[-a-zA-Z0-9._~:/?#\[\]@!$&'()*+,;=]+|(?:[-a-zA-Z0-9]+\.)+(?:com|org|net|io|edu|gov|in|ai|co|app|dev)(?:/[-a-zA-Z0-9._~:/?#\[\]@!$&'()*+,;=]*)?\b""",
             Pattern.CASE_INSENSITIVE
         )
 
@@ -70,7 +70,7 @@ class EntityPatternExtractor {
      * Extracts all structured entities found within [text].
      * Can optionally correlate with a given [boundingBox].
      */
-    fun extractEntities(text: String, boundingBox: Rect? = null): List<DetectedEntity> {
+    fun extractEntities(text: String, boundingBox: ScreenRect? = null): List<DetectedEntity> {
         if (text.isBlank()) return emptyList()
 
         val entities = mutableListOf<DetectedEntity>()
@@ -169,7 +169,7 @@ class EntityPatternExtractor {
         return entities.distinctBy { it.type to it.rawValue }
     }
 
-    private fun detectAddress(text: String, boundingBox: Rect?): List<DetectedEntity> {
+    private fun detectAddress(text: String, boundingBox: ScreenRect?): List<DetectedEntity> {
         val lines = text.split("\n")
         val detected = mutableListOf<DetectedEntity>()
 
@@ -198,7 +198,7 @@ class EntityPatternExtractor {
         return detected
     }
 
-    private fun detectEventClues(text: String, boundingBox: Rect?): List<DetectedEntity> {
+    private fun detectEventClues(text: String, boundingBox: ScreenRect?): List<DetectedEntity> {
         val lines = text.split("\n")
         val detected = mutableListOf<DetectedEntity>()
 

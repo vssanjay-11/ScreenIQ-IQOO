@@ -8,7 +8,7 @@ import android.graphics.Bitmap
  */
 data class ScreenCaptureResult(
     val captureId: String,
-    val bitmap: Bitmap,
+    val bitmap: Bitmap? = null,
     val width: Int,
     val height: Int,
     val timestampMs: Long,

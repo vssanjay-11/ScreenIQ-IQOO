@@ -52,9 +52,7 @@ class AccessibilityScreenshotProviderTest {
                 callback: AccessibilityService.TakeScreenshotCallback
             ) {
                 // Simulate OS returning ERROR_TAKE_SCREENSHOT_INVALID_WINDOW (code 5)
-                executor.execute {
-                    callback.onFailure(AccessibilityService.ERROR_TAKE_SCREENSHOT_INVALID_WINDOW)
-                }
+                callback.onFailure(AccessibilityService.ERROR_TAKE_SCREENSHOT_INVALID_WINDOW)
             }
         }
 
@@ -77,9 +75,7 @@ class AccessibilityScreenshotProviderTest {
                 executor: Executor,
                 callback: AccessibilityService.TakeScreenshotCallback
             ) {
-                executor.execute {
-                    callback.onFailure(AccessibilityService.ERROR_TAKE_SCREENSHOT_INTERVAL_RIGID)
-                }
+                callback.onFailure(3 /* RATE_LIMIT */)
             }
         }
 
@@ -102,9 +98,7 @@ class AccessibilityScreenshotProviderTest {
                 executor: Executor,
                 callback: AccessibilityService.TakeScreenshotCallback
             ) {
-                executor.execute {
-                    callback.onFailure(AccessibilityService.ERROR_TAKE_SCREENSHOT_INVALID_DISPLAY)
-                }
+                callback.onFailure(AccessibilityService.ERROR_TAKE_SCREENSHOT_INVALID_DISPLAY)
             }
         }
 

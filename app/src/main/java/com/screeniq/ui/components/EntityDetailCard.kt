@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.screeniq.core.model.ContentCategory
 import com.screeniq.core.model.ContentClassification
 import com.screeniq.core.model.EntityType
@@ -57,7 +58,7 @@ fun EntityDetailCard(
                     text = categoryHeader,
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = androidx.compose.ui.unit.sp(1.1f)
+                        letterSpacing = 1.1.sp
                     ),
                     color = BrandSecondary
                 )

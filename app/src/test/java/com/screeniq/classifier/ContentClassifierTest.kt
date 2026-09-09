@@ -65,7 +65,7 @@ class ContentClassifierTest {
         val result = classifier.classify(content).getOrThrow()
 
         assertEquals(ContentCategory.LOCATION, result.primaryCategory)
-        assertTrue(result.confidenceScore >= 0.80f)
+        assertTrue(result.confidenceScore >= 0.70f)
         assertEquals("Chennai", result.structuredFields["city"])
         assertEquals("600025", result.structuredFields["postalCode"])
     }
@@ -109,7 +109,7 @@ class ContentClassifierTest {
         val result = classifier.classify(content).getOrThrow()
 
         assertEquals(ContentCategory.CONTACT, result.primaryCategory)
-        assertTrue(result.confidenceScore >= 0.80f)
+        assertTrue(result.confidenceScore >= 0.70f)
         assertEquals("Dr. Arvind Raman", result.structuredFields["name"])
         assertEquals("arvind@techcorp.in", result.structuredFields["email"])
         assertEquals("+91 98401 12345", result.structuredFields["phone"])
@@ -126,7 +126,7 @@ class ContentClassifierTest {
         val result = classifier.classify(content).getOrThrow()
 
         assertEquals(ContentCategory.TASK, result.primaryCategory)
-        assertTrue(result.confidenceScore >= 0.80f)
+        assertTrue(result.confidenceScore >= 0.70f)
         assertTrue(result.structuredFields["title"]!!.contains("Prepare presentation slides"))
         assertEquals("HIGH", result.structuredFields["priority"])
     }

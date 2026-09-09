@@ -18,9 +18,18 @@ class DevFallbackTriggerReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == ACTION_FALLBACK_TRIGGER) {
-            Log.d(TAG, "ScreenIQ dev fallback trigger broadcast received.")
+            val scenario = intent.getStringExtra("scenario")
+            Log.d(TAG, "ScreenIQ dev fallback trigger broadcast received (scenario=$scenario).")
             val emitted = GestureTriggerManager.getInstance().notifyFallbackTrigger()
-            Log.i(TAG, "Emitted 4-finger fallback trigger event. Accepted: $emitted")
+            Log.i(TAG, "Emitted 2-finger fallback trigger event. Accepted: $emitted")
+
+            if (context != null) {
+                try {
+                    com.screeniq.ui.overlay.ScreenIQOverlayActivity.start(context, scenario)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Failed to launch overlay activity: ${e.message}")
+                }
+            }
         }
     }
 

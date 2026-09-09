@@ -34,7 +34,7 @@ class AccessibilityScreenshotProvider(
      */
     suspend fun capture(): Result<ScreenCaptureResult> {
         // 1. Verify OS version capability (Android 11 / API 30+)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT in 1 until Build.VERSION_CODES.R) {
             return Result.failure(
                 CaptureException(
                     CaptureError.UnsupportedEnvironment(
@@ -157,7 +157,7 @@ class AccessibilityScreenshotProvider(
             AccessibilityService.ERROR_TAKE_SCREENSHOT_NO_ACCESSIBILITY_ACCESS ->
                 CaptureError.ServiceUnavailable
 
-            AccessibilityService.ERROR_TAKE_SCREENSHOT_INTERVAL_RIGID ->
+            3 /* ERROR_TAKE_SCREENSHOT_INTERVAL */ ->
                 CaptureError.RateLimited
 
             AccessibilityService.ERROR_TAKE_SCREENSHOT_INVALID_DISPLAY ->

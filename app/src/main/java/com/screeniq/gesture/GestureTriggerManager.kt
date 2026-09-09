@@ -55,20 +55,26 @@ class GestureTriggerManager private constructor() : GestureTriggerListener {
     }
 
     /**
-     * Convenience method for notifying a 4-finger swipe-up trigger event.
+     * Primary convenience method for notifying a 2-finger swipe trigger event.
      */
-    fun notifyFourFingerSwipe(pointerCount: Int = 4, timestampMs: Long = System.currentTimeMillis()): Boolean {
+    fun notifyTwoFingerSwipe(pointerCount: Int = 2, timestampMs: Long = System.currentTimeMillis()): Boolean {
         return notifyTrigger(GestureTriggerEvent(pointerCount = pointerCount, timestampMs = timestampMs))
     }
 
     /**
-     * Fallback trigger mechanism for development, testing, or devices where 4-finger
-     * accessibility gestures are unavailable or intercepted by OEM skins.
+     * Backward-compatibility convenience method for notifying a multi-finger swipe trigger event.
+     */
+    fun notifyFourFingerSwipe(pointerCount: Int = 2, timestampMs: Long = System.currentTimeMillis()): Boolean {
+        return notifyTrigger(GestureTriggerEvent(pointerCount = pointerCount, timestampMs = timestampMs))
+    }
+
+    /**
+     * Fallback trigger mechanism for development, testing, or demo shortcuts.
      */
     fun notifyFallbackTrigger(): Boolean {
         return notifyTrigger(
             GestureTriggerEvent(
-                pointerCount = 4,
+                pointerCount = 2,
                 timestampMs = System.currentTimeMillis()
             )
         )

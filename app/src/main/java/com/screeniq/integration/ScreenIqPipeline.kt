@@ -165,8 +165,8 @@ class ScreenIqPipeline(
         } finally {
             // Strict In-Memory Privacy Guarantee: recycle bitmap once processing is completed
             try {
-                if (!frame.bitmap.isRecycled) {
-                    frame.bitmap.recycle()
+                if (frame.bitmap?.isRecycled == false) {
+                    frame.bitmap?.recycle()
                     Log.d(TAG, "Capture bitmap successfully recycled to prevent memory leak.")
                 }
             } catch (e: Exception) {
@@ -207,7 +207,7 @@ class ScreenIqPipeline(
             historyRepository.recordAction(historyItem)
 
             withContext(Dispatchers.Main) {
-                overlayController.notifySuccess(result)
+                overlayController.notifyExecutionComplete(action, result)
             }
             _pipelineState.value = PipelineStatus.Completed(result)
         }
@@ -263,7 +263,11 @@ class CoreHistoryRepositoryAdapter(
             contentType = item.category.name,
             summary = item.summarySnippet,
             actionSelected = item.actionType.name,
-            actionResult = if (item.wasSuccessful) com.screeniq.history.model.ActionResultSummary.SUCCESS else com.screeniq.history.model.ActionResultSummary.FAILED,
+            actionResult = if (item.wasSuccessful) {
+                com.screeniq.history.model.ActionResultSummary.success("Completed")
+            } else {
+                com.screeniq.history.model.ActionResultSummary.failure("Failed")
+            },
             confidence = 0.95f
         )
         delegate.recordAction(entry)
@@ -275,10 +279,10 @@ class CoreHistoryRepositoryAdapter(
             ActionHistoryItem(
                 id = entry.id,
                 timestampMs = entry.timestampMs,
-                category = try { com.screeniq.core.model.ContentCategory.valueOf(entry.contentType) } catch (_: Exception) { com.screeniq.core.model.ContentCategory.UNKNOWN_GENERAL },
+                category = try { com.screeniq.core.model.ContentCategory.valueOf(entry.contentType) } catch (_: Exception) { com.screeniq.core.model.ContentCategory.UNKNOWN },
                 actionType = try { com.screeniq.core.model.ActionType.valueOf(entry.actionSelected) } catch (_: Exception) { com.screeniq.core.model.ActionType.COPY_TO_CLIPBOARD },
                 summarySnippet = entry.summary,
-                wasSuccessful = entry.actionResult == com.screeniq.history.model.ActionResultSummary.SUCCESS
+                wasSuccessful = entry.actionResult.wasSuccessful
             )
         }
     }

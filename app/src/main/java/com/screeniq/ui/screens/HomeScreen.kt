@@ -110,7 +110,7 @@ fun HomeScreen(
                         }
 
                         Text(
-                            text = "4-Finger Swipe",
+                            text = "2-Finger Swipe Active",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -123,7 +123,7 @@ fun HomeScreen(
                     )
 
                     Text(
-                        text = "Perform a 4-finger swipe on any screen to capture, understand content, and execute native actions instantly.",
+                        text = "Swipe down with 2 fingers on any screen for full-screen AI scanning and instant action execution in a floating pop-up window.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

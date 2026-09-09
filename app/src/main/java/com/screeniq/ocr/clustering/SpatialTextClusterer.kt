@@ -1,6 +1,6 @@
-﻿package com.screeniq.ocr.clustering
+package com.screeniq.ocr.clustering
 
-import android.graphics.Rect
+import com.screeniq.core.model.ScreenRect
 import com.screeniq.core.model.TextBlock
 
 /**
@@ -78,7 +78,7 @@ class SpatialTextClusterer {
 
         val boxes = cluster.mapNotNull { it.boundingBox }
         val mergedBox = if (boxes.isNotEmpty()) {
-            Rect(
+            ScreenRect(
                 boxes.minOf { it.left },
                 boxes.minOf { it.top },
                 boxes.maxOf { it.right },
