@@ -165,13 +165,13 @@ private fun triggerFastGesturePipeline(
     scope: kotlinx.coroutines.CoroutineScope
 ) {
     scope.launch {
-        // Step 1: Capturing screen in-memory
-        controller.notifyCapturing(elapsedMs = 75L)
-        delay(75)
+        // Step 1: Capturing screen in-memory with full-screen AI scan animation
+        controller.notifyCapturing(elapsedMs = 150L)
+        delay(800)
 
         // Step 2: OCR & On-Device Understanding
-        controller.notifyUnderstanding(elapsedMs = 240L)
-        delay(165)
+        controller.notifyUnderstanding(elapsedMs = 950L)
+        delay(1000)
 
         // Step 3: Present Action Result Panel
         val (classification, suggestions) = when (category) {

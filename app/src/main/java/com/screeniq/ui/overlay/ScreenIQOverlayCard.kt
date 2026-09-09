@@ -85,75 +85,79 @@ fun ScreenIQOverlay(
                 ),
             contentAlignment = Alignment.BottomCenter
         ) {
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
-                modifier = Modifier.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { /* Consume clicks inside panel */ }
-                )
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 14.dp, vertical = 12.dp)
-                        .navigationBarsPadding()
-                        .imePadding(),
-                    shape = ScreenIQShapes.extraLarge,
-                    color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 8.dp,
-                    shadowElevation = 16.dp
-                ) {
-                    when (state) {
-                        is OverlayState.Processing -> {
-                            // Full-screen laser scanning animation
-                            ScreenScanAnimationOverlay()
+            when (state) {
+                is OverlayState.Processing -> {
+                    // True Full-screen high-tech laser scanning animation
+                    ScreenScanAnimationOverlay()
+                }
+                is OverlayState.SuggestionsReady -> {
+                    // Floating pop-up window in the center of the screen
+                    FloatingProcessResultWindow(
+                        classification = state.classification,
+                        suggestions = state.suggestions,
+                        elapsedMs = state.elapsedMs,
+                        onActionSelected = { action ->
+                            if (action.safetyLevel == ActionSafetyLevel.SAFE_AUTO) {
+                                onActionSelected(action)
+                            } else {
+                                onConfirmAction(action)
+                            }
+                        },
+                        onDismiss = onDismiss
+                    )
+                }
+                else -> {
+                    AnimatedVisibility(
+                        visible = isVisible,
+                        enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(),
+                        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { /* Consume clicks inside panel */ }
+                        )
+                    ) {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 14.dp, vertical = 12.dp)
+                                .navigationBarsPadding()
+                                .imePadding(),
+                            shape = ScreenIQShapes.extraLarge,
+                            color = MaterialTheme.colorScheme.surface,
+                            tonalElevation = 8.dp,
+                            shadowElevation = 16.dp
+                        ) {
+                            when (state) {
+                                is OverlayState.ConfirmingAction -> {
+                                    ConfirmationCard(
+                                        action = state.action,
+                                        classification = state.classification,
+                                        onConfirm = { onActionSelected(state.action) },
+                                        onCancel = onDismiss
+                                    )
+                                }
+                                is OverlayState.Executing -> {
+                                    ExecutingCard(
+                                        action = state.action,
+                                        onCancel = onDismiss
+                                    )
+                                }
+                                is OverlayState.ExecutionComplete -> {
+                                    ExecutionCompleteCard(
+                                        state = state,
+                                        onDismiss = onDismiss
+                                    )
+                                }
+                                is OverlayState.Error -> {
+                                    ErrorCard(
+                                        message = state.message,
+                                        onDismiss = onDismiss
+                                    )
+                                }
+                                else -> Unit
+                            }
                         }
-                        is OverlayState.SuggestionsReady -> {
-                            // Floating pop-up window listing completed background processes & actions
-                            FloatingProcessResultWindow(
-                                classification = state.classification,
-                                suggestions = state.suggestions,
-                                elapsedMs = state.elapsedMs,
-                                onActionSelected = { action ->
-                                    if (action.safetyLevel == ActionSafetyLevel.SAFE_AUTO) {
-                                        onActionSelected(action)
-                                    } else {
-                                        onConfirmAction(action)
-                                    }
-                                },
-                                onDismiss = onDismiss
-                            )
-                        }
-                        is OverlayState.ConfirmingAction -> {
-                            ConfirmationCard(
-                                action = state.action,
-                                classification = state.classification,
-                                onConfirm = { onActionSelected(state.action) },
-                                onCancel = onDismiss
-                            )
-                        }
-                        is OverlayState.Executing -> {
-                            ExecutingCard(
-                                action = state.action,
-                                onCancel = onDismiss
-                            )
-                        }
-                        is OverlayState.ExecutionComplete -> {
-                            ExecutionCompleteCard(
-                                state = state,
-                                onDismiss = onDismiss
-                            )
-                        }
-                        is OverlayState.Error -> {
-                            ErrorCard(
-                                message = state.message,
-                                onDismiss = onDismiss
-                            )
-                        }
-                        OverlayState.Hidden -> Unit
                     }
                 }
             }

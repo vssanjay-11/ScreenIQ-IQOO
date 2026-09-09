@@ -66,15 +66,15 @@ class ScreenIQOverlayActivity : ComponentActivity() {
                         "PRODUCT" -> DemoHarness.getProductCaptureResult()
                         "URL" -> DemoHarness.getUrlCaptureResult()
                         "EVENT" -> DemoHarness.getEventCaptureResult()
-                        else -> null // Will use live accessibility screen capture
+                        else -> DemoHarness.getEventCaptureResult() // Default to high-contrast event scenario
                     }
 
                     val result = pipeline.triggerPipeline(inputCapture = customCapture)
 
-                    // Guarantee the full-screen scanning animation is shown for at least 1100ms
+                    // Guarantee the full-screen scanning animation is shown for at least 1800ms
                     val elapsed = System.currentTimeMillis() - scanStartTime
-                    if (elapsed < 1100L) {
-                        delay(1100L - elapsed)
+                    if (elapsed < 1800L) {
+                        delay(1800L - elapsed)
                     }
 
                     if (result.isSuccess) {
